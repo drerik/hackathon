@@ -28,3 +28,25 @@ After that you can run the following command:
 ```
 $> npm start
 ```
+
+## Ideas
+
+### Consultants
+* Download url
+* App installed notif
+* App started/stopped notif
+* Error notif
+* Documentation finder
+* Discuss bot
+* New release notif (with changelog)
+* Market bot (new apps, updated apps)
+
+### Ops
+* Status (metrics)
+* Network notif
+* Start and stop doccer containers
+* Trigger jenkins job
+
+### QA
+* Support bot
+* Github issues bot

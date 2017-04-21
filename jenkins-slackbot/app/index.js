@@ -1,5 +1,3 @@
-console.log(process.env); process.exit;
-
 // Require libraries.
 const botkit = require('botkit');
 
@@ -16,9 +14,35 @@ const slackBot = controller.spawn({
   token: process.env.TOKEN
 });
 
-// Listen for a direct message.
-controller.hears([/^hello robot$/i], ['direct_message'], function(bot, message) {
-  bot.reply(message, 'Hello Human!');
+const commands = {
+  commands: {
+    description: 'List commands',
+    hears: /^commands$/,
+    callback: (bot, message) => {
+      bot.reply(message, "Here are the commands:\n" + Object.keys(commands).map(c => `${c}: ${commands[c].description}`).join("\n"));
+    }
+  },
+  example: {
+    description: 'Says hello',
+    hears: /^example$/,
+    callback: (bot, message) => {
+      bot.reply(message, 'example :)');
+    }
+  },
+  'list jobs': {
+    description: 'List Jenkins jobs',
+    hears: /^list jobs$/,
+    callback: (bot, message) => {
+      bot.reply(message, 'Job list:');
+    }
+  }
+}
+
+Object.keys(commands).forEach(command => {
+  // Listen for a direct message.
+  controller.hears([commands[command].hears], ['direct_message'], function(bot, message) {
+    commands[command].callback(bot, message);
+  });
 });
 
 // Start real-time messaging.

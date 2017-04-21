@@ -1,4 +1,4 @@
-# SlackBot Hackathon
+# Jenkins SlackBot Hackathon
 
 This hackathon is all about creating cool bot's for [Slack](https://slack.com).
 We are going to use [NodeJS](https://nodejs.org) for this since we have not
@@ -21,10 +21,19 @@ most features out of the box.
 * [BotKit Docs for Slack](https://github.com/howdyai/botkit/blob/master/docs/readme-slack.md)
 
 ## Running
+Install dependencies if you haven't done it already
+```
+npm install
+```
 
-To run this example you will first need to set the token in `app/index.js`.
-After that you can run the following command:
+Set token as `TOKEN` environment variable.
+```
+export TOKEN=<your token>
+export JENKINS_USER=<jenkins username>
+export JENKINS_PWD=<jenkins user password>
+```
 
+Start the application
 ```
 $> npm start
 ```

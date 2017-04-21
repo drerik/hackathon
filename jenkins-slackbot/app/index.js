@@ -35,12 +35,12 @@ const commands = {
     description: 'List Jenkins jobs',
     hears: /^list jobs$/,
     callback: (bot, message) => {
-      const juhu = jenkins.info(function(err, data) {
+      const list = jenkins.job.list(function(err, data) {
         if (err) throw err;
         console.log('info', data);
       });
-      console.log(juhu);
-      bot.reply(message, 'Job list:');
+      console.log(list);
+      bot.reply(message, `Job list:\n${list.join("\n")}`);
     }
   },
   'start job': {
@@ -49,7 +49,11 @@ const commands = {
     callback: (bot, message) => {
       console.log(message);
       const job = message.text.replace(/^start job/,'')
-      bot.reply(message, `Starting job:${job} ...`);
+      jenkins.job.build(job, function(err, data) {
+        if (err) throw err;
+        console.log('queue item number', data);
+      });
+      bot.reply(message, `Building job:${job} ...`);
     }
   }
 }

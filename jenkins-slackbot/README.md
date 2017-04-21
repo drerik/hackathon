@@ -29,8 +29,7 @@ npm install
 Set token as `TOKEN` environment variable.
 ```
 export TOKEN=<your token>
-export JENKINS_USER=<jenkins username>
-export JENKINS_PWD=<jenkins user password>
+export JENKINS_URL=<jenkins url with password>
 ```
 
 Start the application

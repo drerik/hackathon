@@ -1,3 +1,5 @@
+console.log(process.env); process.exit;
+
 // Require libraries.
 const botkit = require('botkit');
 
@@ -11,7 +13,7 @@ const controller = botkit.slackbot({
 // Create the slackbot.
 const slackBot = controller.spawn({
   // IMPORTANT! Do not check in this token to GIT.
-  token: 'TOKEN_HERE'
+  token: process.env.TOKEN
 });
 
 // Listen for a direct message.

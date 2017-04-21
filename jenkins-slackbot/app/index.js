@@ -1,7 +1,7 @@
 // Require libraries.
 const config = require('../config');
 const botkit = require('botkit');
-const jenkins = require('jenkins')({ baseUrl: config.JENKINS_URL, crumbIssuer: true });
+const jenkins = require('jenkins')({ baseUrl: config.JENKINS_URL, crumbIssuer: true, promisify: true });
 
 // Create slackbot controller.
 const controller = botkit.slackbot({
@@ -37,8 +37,8 @@ const commands = {
     callback: (bot, message) => {
       jenkins.job.list(function(err, jobs) {
         if (err) throw err;
-        console.log('info', jobs);
-        bot.reply(message, `Job list:\n${jobs.map((j) = j.name).join("\n")}`);
+        console.log('info: ', jobs);
+        bot.reply(message, `Job list:\n${jobs.map((j) => j.name).join("\n")}`);
       });
     }
   },
@@ -47,11 +47,11 @@ const commands = {
     hears: /^start job /,
     callback: (bot, message) => {
       //console.log(message);
-      const job = message.text.replace(/^start job/,'')
-      jenkins.job.build(job, function(err, data) {
+      const jobName = message.text.replace(/^start job /,'')
+      jenkins.job.build({ name: jobName }, (err, data) => {
         if (err) throw err;
         console.log('queue item number', data);
-        bot.reply(message, `Building job:${job} queue item number:${data}`);
+        bot.reply(message, `Building jobName:${jobName} queue item number:${data}`);
       });
     }
   }

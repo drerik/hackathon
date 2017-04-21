@@ -29,6 +29,16 @@ After that you can run the following command:
 $> npm start
 ```
 
+## TODO
+
+* Make a user in jenkins with admin rights.
+* Jenkins node library?
+* Try a curl with that user?
+* Make a command tree
+* List jenkins jobs
+
+
+
 ## Ideas
 
 ### Consultants

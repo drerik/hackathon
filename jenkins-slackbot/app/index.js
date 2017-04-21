@@ -42,8 +42,24 @@ const commands = {
       });
     }
   },
+  'status job': {
+    description: 'Gets status for a jenkins job',
+    hears: /^status job /,
+    callback: (bot, message) => {
+      const jobName = message.text.replace(/^status job /,'')
+      console.log('Getting status for job ', jobName);
+      jenkins.job.get(jobName, function(err, data) {
+        if (err) throw err;
+        if (data.inQueue) {
+          bot.reply(message, "Job "+ jobName + " is running");
+        } else {
+          bot.reply(message, "Job "+ jobName + " is not running");
+        }
+      });
+    }
+  },
   'start job': {
-    description: 'List Jenkins jobs',
+    description: 'Start a Jenkins job',
     hears: /^start job /,
     callback: (bot, message) => {
       //console.log(message);
@@ -63,20 +79,6 @@ const commands = {
 
         });
 
-        /*jenkins.build.get(jobName, queueNumber, function(err, data) {
-          if (err) {
-            bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} err:${err}`);
-          } else {
-            console.log('build', data);
-            bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} build:${JSON.stringify(data, null, 4)}`);
-          }
-        });
-
-        jenkins.queue.item(queueNumber, function(err, data) {
-          if (err) throw err;
-          console.log('item', data);
-          bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} data:${JSON.stringify(data, null, 4)}`);
-        });*/
       }); // job.build
     }
   }

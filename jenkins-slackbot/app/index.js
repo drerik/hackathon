@@ -43,7 +43,7 @@ const commands = {
     }
   },
   'start job': {
-    description: 'List Jenkins jobs',
+    description: 'Start Jenkins job',
     hears: /^start job /,
     callback: (bot, message) => {
       //console.log(message);

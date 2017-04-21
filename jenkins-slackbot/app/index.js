@@ -35,25 +35,24 @@ const commands = {
     description: 'List Jenkins jobs',
     hears: /^list jobs$/,
     callback: (bot, message) => {
-      const list = jenkins.job.list(function(err, data) {
+      jenkins.job.list(function(err, jobs) {
         if (err) throw err;
-        console.log('info', data);
+        console.log('info', jobs);
+        bot.reply(message, `Job list:\n${jobs.map((j) = j.name).join("\n")}`);
       });
-      console.log(list);
-      bot.reply(message, `Job list:\n${list.join("\n")}`);
     }
   },
   'start job': {
     description: 'List Jenkins jobs',
     hears: /^start job /,
     callback: (bot, message) => {
-      console.log(message);
+      //console.log(message);
       const job = message.text.replace(/^start job/,'')
       jenkins.job.build(job, function(err, data) {
         if (err) throw err;
         console.log('queue item number', data);
+        bot.reply(message, `Building job:${job} queue item number:${data}`);
       });
-      bot.reply(message, `Building job:${job} ...`);
     }
   }
 }

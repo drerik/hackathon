@@ -1,5 +1,7 @@
 // Require libraries.
+const config = require('../config');
 const botkit = require('botkit');
+const jenkins = require('jenkins')({ baseUrl: config.JENKINS_URL, crumbIssuer: true });
 
 // Create slackbot controller.
 const controller = botkit.slackbot({
@@ -11,7 +13,7 @@ const controller = botkit.slackbot({
 // Create the slackbot.
 const slackBot = controller.spawn({
   // IMPORTANT! Do not check in this token to GIT.
-  token: process.env.TOKEN
+  token: config.TOKEN
 });
 
 const commands = {
@@ -33,7 +35,24 @@ const commands = {
     description: 'List Jenkins jobs',
     hears: /^list jobs$/,
     callback: (bot, message) => {
-      bot.reply(message, 'Job list:');
+      jenkins.job.list(function(err, jobs) {
+        if (err) throw err;
+        console.log('info', jobs);
+        bot.reply(message, `Job list:\n${jobs.map((j) = j.name).join("\n")}`);
+      });
+    }
+  },
+  'start job': {
+    description: 'List Jenkins jobs',
+    hears: /^start job /,
+    callback: (bot, message) => {
+      //console.log(message);
+      const job = message.text.replace(/^start job/,'')
+      jenkins.job.build(job, function(err, data) {
+        if (err) throw err;
+        console.log('queue item number', data);
+        bot.reply(message, `Building job:${job} queue item number:${data}`);
+      });
     }
   }
 }

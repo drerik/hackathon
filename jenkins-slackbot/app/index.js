@@ -35,6 +35,15 @@ const commands = {
     callback: (bot, message) => {
       bot.reply(message, 'Job list:');
     }
+  },
+  'start job': {
+    description: 'List Jenkins jobs',
+    hears: /^start job /,
+    callback: (bot, message) => {
+      console.log(message);
+      const job = message.text.replace(/^start job/,'')
+      bot.reply(message, `Starting job:${job} ...`);
+    }
   }
 }
 

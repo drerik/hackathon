@@ -35,7 +35,7 @@ const commands = {
     description: 'List Jenkins jobs',
     hears: /^list jobs$/,
     callback: (bot, message) => {
-      jenkins.job.list(function(err, jobs) {
+      jenkins.job.list((err, jobs) => {
         if (err) throw err;
         console.log('info: ', jobs);
         bot.reply(message, `Job list:\n${jobs.map((j) => j.name).join("\n")}`);
@@ -48,11 +48,36 @@ const commands = {
     callback: (bot, message) => {
       //console.log(message);
       const jobName = message.text.replace(/^start job /,'')
-      jenkins.job.build({ name: jobName }, (err, data) => {
+      jenkins.job.build({ name: jobName }, (err, queueNumber) => {
         if (err) throw err;
-        console.log('queue item number', data);
-        bot.reply(message, `Building jobName:${jobName} queue item number:${data}`);
-      });
+        console.log('queue item number', queueNumber);
+        bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber}`);
+
+        jenkins.job.get(jobName, function(err, data) {
+          if (err) {
+            bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} err:${err}`);
+          } else {
+            console.log('job', data);
+            bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} job:${JSON.stringify(data, null, 4)}`);
+          }
+
+        });
+
+        /*jenkins.build.get(jobName, queueNumber, function(err, data) {
+          if (err) {
+            bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} err:${err}`);
+          } else {
+            console.log('build', data);
+            bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} build:${JSON.stringify(data, null, 4)}`);
+          }
+        });
+
+        jenkins.queue.item(queueNumber, function(err, data) {
+          if (err) throw err;
+          console.log('item', data);
+          bot.reply(message, `Building jobName:${jobName} queue item number:${queueNumber} data:${JSON.stringify(data, null, 4)}`);
+        });*/
+      }); // job.build
     }
   }
 }
